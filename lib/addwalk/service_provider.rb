@@ -7,10 +7,10 @@ module Addwalk
       @user_access_token = Addwalk.user_access_token
       @user_access_token_secret = Addwalk.user_access_token_secret
 
-      @api_endpoint = "http://api.addwalk.dev:3000/"  
+      @api_endpoint = Addwalk.api_endpoint || "http://api.addwalk.com"
 
       @client = OAuth2::Client.new(@app_id, @app_secret, site: @api_endpoint)
-      @token = @client.password.get_token(@user_access_token, @user_access_token_secret)   
+      @token = @client.password.get_token(@user_access_token, @user_access_token_secret)
     end
 
     def client

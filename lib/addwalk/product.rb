@@ -1,10 +1,10 @@
 module Addwalk
-  class Source < Addwalk::Resource
+  class Product < Addwalk::Resource
 
     def initialize token
       @token = token
-      @model_name = "source"
-      @model_path = "sources"
+      @model_name = "product"
+      @model_path = "products"
     end
 
     def index params = {}
