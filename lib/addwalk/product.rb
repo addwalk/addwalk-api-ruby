@@ -12,7 +12,7 @@ module Addwalk
       params[:status] ||= 'all'
       params[:page] ||= 1
 
-      super index params
+      super params
     end
 
   end

@@ -1,15 +1,14 @@
 module Addwalk
-  class Source < Addwalk::Resource
+  class Tag < Addwalk::Resource
 
     def initialize token
       @token = token
-      @model_name = "source"
-      @model_path = "sources"
+      @model_name = "tag"
+      @model_path = "tags"
     end
 
     def index params = {}
-      params[:token] ||= nil
-      params[:status] ||= 'all'
+      params[:type] ||= 'all'
       params[:page] ||= 1
 
       super params

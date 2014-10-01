@@ -10,15 +10,14 @@ module Addwalk
     end
 
     def headers
-      { 'Accept' => 'application/json', 'Content-Type' => 'application/x-www-form-urlencoded' }
+      { 'Accept' => 'application/json', 'Content-Type' => 'application/json' }
+      #{ 'Accept' => 'application/json', 'Content-Type' => 'application/x-www-form-urlencoded' }
     end
 
 
     # basic restful-actions
-
     def index params = {}
       params[:page] ||= 1
-
       check_result get_result( @model_path, params )
     end
 
@@ -40,19 +39,18 @@ module Addwalk
 
 
     # request-types
-
     def get_result endpoint, params = {}
       @response = @token.get(url(endpoint), headers: headers, params: params)
       @result = JSON.parse(@response.body)
     end
 
     def post_result endpoint, params = {}
-      @response = @token.post(url(endpoint), headers: headers, params: params)
+      @response = @token.post(url(endpoint), headers: headers, body: JSON.generate(params))
       @result = JSON.parse(@response.body)
     end
 
     def put_result endpoint, params = {}
-      @response = @token.put(url(endpoint), headers: headers, params: params)
+      @response = @token.put(url(endpoint), headers: headers, body: JSON.generate(params))
       @result = JSON.parse(@response.body)
     end
 
@@ -67,32 +65,27 @@ module Addwalk
     # check result -> and return the response
     def check_result result
       if result["response"] && result["response"]["success"] == true
-        return convert_result_keys_to_symbols(result["response"])
+        return recursive_symbolize_keys(result["response"])
       elsif result["response"].size > 0
-        return convert_result_keys_to_symbols(result["response"])
+        return recursive_symbolize_keys(result["response"])
       end
       return false
     end
 
-    # we want the result with symbols as keys and not strings, right?
-    def convert_result_keys_to_symbols response
-      return nil if !response
-      new_hash = Hash.new
-
-      response.each do |k,v|
-        if(@model_name == k)
-          new_hash[k.to_sym] = Hash.new
-          unless v
-            response_obj = nil
-          else
-            response_obj = v.each{ |k1,v1| new_hash[k.to_sym][k1.to_sym] = v1 }
+    def recursive_symbolize_keys(h)
+      case h
+      when Hash
+        Hash[
+          h.map do |k, v|
+            [ k.respond_to?(:to_sym) ? k.to_sym : k, recursive_symbolize_keys(v) ]
           end
-        else
-          new_hash[k.to_sym] = v
-        end
+        ]
+      when Enumerable
+        h.map { |v| recursive_symbolize_keys(v) }
+      else
+        h
       end
-
-      return new_hash
     end
+
   end
 end
