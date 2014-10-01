@@ -13,6 +13,12 @@ describe "Addwalk::SourceSet" do
     expect(@source_set[:success]).to eq(true)
   end
 
+  it "lists all source_sets of user" do
+    source_set_request = Addwalk::SourceSet.new(@service_provider.token).index()
+    expect(source_set_request[:success]).to eq(true)
+    expect(source_set_request[:source_sets].size).to eq(1)
+  end
+
   it "should find a new source_set by id" do
     new_source_set = Addwalk::SourceSet.new(@service_provider.token).show(@source_set[:source_set][:id])
     expect(@source_set[:source_set]).to eq(new_source_set[:source_set])
