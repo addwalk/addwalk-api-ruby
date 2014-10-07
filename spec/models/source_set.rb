@@ -24,11 +24,6 @@ describe "Addwalk::SourceSet" do
     expect(@source_set[:source_set]).to eq(new_source_set[:source_set])
   end
 
-  it "should find a new source_set by token" do
-    new_source_set2 = Addwalk::SourceSet.new(@service_provider.token).show(@source_set[:source_set][:token])
-    expect(@source_set[:source_set]).to eq(new_source_set2[:source_set])
-  end
-
   it "should update a source_set by id" do
     updated_source_set = Addwalk::SourceSet.new(@service_provider.token).update(@source_set[:source_set][:id], {
       name: "new test name",

@@ -11,7 +11,6 @@ module Addwalk
 
     def headers
       { 'Accept' => 'application/json', 'Content-Type' => 'application/json' }
-      #{ 'Accept' => 'application/json', 'Content-Type' => 'application/x-www-form-urlencoded' }
     end
 
 
@@ -63,13 +62,9 @@ module Addwalk
     private
 
     # check result -> and return the response
+    # Todo: Include pagination
     def check_result result
-      if result["response"] && result["response"]["success"] == true
-        return recursive_symbolize_keys(result["response"])
-      elsif result["response"].size > 0
-        return recursive_symbolize_keys(result["response"])
-      end
-      return false
+      return recursive_symbolize_keys(result["response"])
     end
 
     def recursive_symbolize_keys(h)

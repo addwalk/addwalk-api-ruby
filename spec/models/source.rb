@@ -46,15 +46,16 @@ describe "Addwalk::Source" do
     Addwalk::Source.new(@service_provider.token).destroy(source[:source][:id])
   end
 
+  it "returns all sources of user" do
+    sources = Addwalk::Source.new(@service_provider.token).index()
+    expect(sources.count).to eq(0)
 
-  xit "should return all sources of a source_set by source_set_id" do
-    sources = Addwalk::Source.new(@service_provider.token).index({ source_set_id: @source_set.id })
-    sources.count.should == 0
-  end
+    source = create_random_source(@source_set[:id])
+    expect(source[:success]).to eq(true)
+    sources = Addwalk::Source.new(@service_provider.token).index()
+    expect(sources.count).to eq(1)
 
-  xit "should return all sources of a source_set by token" do
-    sources = Addwalk::Source.new(@service_provider.token).index({ token: @source_set.token })
-    sources.count.should == 0
+    Addwalk::Source.new(@service_provider.token).destroy(source[:source][:id])
   end
 
   it "should create and find a new source" do
