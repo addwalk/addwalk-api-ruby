@@ -65,7 +65,7 @@ describe "Addwalk::Source" do
     expect(new_source[:source]).to eq(source[:source])
 
     destroyed_source = Addwalk::Source.new(@service_provider.token).destroy(source[:source][:id])
-    destroyed_source[:success] = true
+    expect(destroyed_source[:success]).to eq(true)
   end
 
   it "should update a source" do
@@ -86,7 +86,7 @@ describe "Addwalk::Source" do
     expect(new_source[:source][:description]).to eq("new test description")
 
     destroyed_source = Addwalk::Source.new(@service_provider.token).destroy(source[:source][:id])
-    destroyed_source[:success] = true
+    expect(destroyed_source[:success]).to eq(true)
   end
 
   it "should delete a source" do
@@ -94,10 +94,10 @@ describe "Addwalk::Source" do
     expect(source[:success]).to eq(true)
 
     destroyed_source = Addwalk::Source.new(@service_provider.token).destroy(source[:source][:id])
-    destroyed_source[:success] = true
+    expect(destroyed_source[:success]).to eq(true)
 
     destroyed_source = Addwalk::Source.new(@service_provider.token).show(source[:source][:id])
-    destroyed_source[:success] = false
+    expect(destroyed_source[:success]).to eq(false)
   end
 
   it "should create a new source with source-set-name" do
@@ -116,10 +116,10 @@ describe "Addwalk::Source" do
 
     expect(source_request[:success]).to eq(true)
     source = source_request[:source]
-    source[:source_set_id].should == @source_set[:id]
+    expect(source[:source_set_id]).to eq(@source_set[:id])
 
     destroyed_source = Addwalk::Source.new(@service_provider.token).destroy(source[:id])
-    destroyed_source[:success] = true
+    expect(destroyed_source[:success]).to eq(true)
   end
 
   it "should create a new source with source-set-id" do
@@ -135,14 +135,14 @@ describe "Addwalk::Source" do
 
     expect(source_request[:success]).to eq(true)
     source = source_request[:source]
-    source[:source_set_id].should == @source_set[:id]
+    expect(source[:source_set_id]).to eq(@source_set[:id])
 
     destroyed_source = Addwalk::Source.new(@service_provider.token).destroy(source[:id])
-    destroyed_source[:success] = true
+    expect(destroyed_source[:success]).to eq(true)
   end
 
-  it "should create a new source with one item" do
-    source_request = Addwalk::Source.new(@service_provider.token).create({
+  def get_full_source_info
+    {
       name: "test source set 123",
       description: "test description",
       url: "http://www.testimages.com/image1.jpg",
@@ -161,24 +161,33 @@ describe "Addwalk::Source" do
           tags: [ "color_black" ]
         }
       ]
-    });
+    }
+  end
+
+  it "should create a new source with one item" do
+    source_request = Addwalk::Source.new(@service_provider.token).create(get_full_source_info)
 
     expect(source_request[:success]).to eq(true)
     source = source_request[:source]
-    source[:source_set_id].should == @source_set[:id]
+    expect(source[:source_set_id]).to eq(@source_set[:id])
 
     # check items and tags
-    source[:items].size.should == 2
+    expect(source[:items].size).to eq(2)
     source[:items].each do |item|
       if item[:x] == 10.0
-        item[:tags].size.should == 4
+        expect(item[:tags].size).to eq(4)
       else
-        item[:tags].size.should == 1
+        expect(item[:tags].size).to eq(1)
       end
     end
 
     destroyed_source = Addwalk::Source.new(@service_provider.token).destroy(source[:id])
-    destroyed_source[:success] = true
+    expect(destroyed_source[:success]).to eq(true)
+  end
+
+  it "should read a source end get products for it" do
+    #source_request = Addwalk::Source.new(@service_provider.token).create(get_full_source_info)
+
   end
 
   after :all do
