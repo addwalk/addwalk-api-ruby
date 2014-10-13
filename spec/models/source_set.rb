@@ -10,6 +10,7 @@ describe "Addwalk::SourceSet" do
   end
 
   it "should create a new source_set" do
+    p @source_set
     expect(@source_set[:success]).to eq(true)
   end
 

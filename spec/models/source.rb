@@ -154,11 +154,13 @@ describe "Addwalk::Source" do
         {
           x: "10.0",
           y: "10.0",
-          tags: [ "gender_men", "color_green", "color_red","capstypes_ballooncap" ]
+          tags: [ "gender_men", "color_green", "color_red", "capstypes_ballooncap" ],
+          category: "area_apparel"
         },{
           x: "15.0",
           y: "15.0",
-          tags: [ "color_black" ]
+          tags: [ "color_black" ],
+          category: "area_apparel"
         }
       ]
     }
@@ -186,8 +188,25 @@ describe "Addwalk::Source" do
   end
 
   it "should read a source end get products for it" do
-    #source_request = Addwalk::Source.new(@service_provider.token).create(get_full_source_info)
+    source_request = Addwalk::Source.new(@service_provider.token).create(get_full_source_info)
+    source = source_request[:source]
+    source_request = Addwalk::Source.new(@service_provider.token).show(source[:id])
 
+    expect(source_request[:success]).to eq(true)
+    source = source_request[:source]
+    expect(source[:items].size).to eq(2)
+    source[:items].each do |item|
+      if item[:x] == 10.0
+        expect(item[:products].size).to be > 0
+        expect(item[:tags].size).to eq(4)
+      else
+        expect(item[:products].size).to be > 0
+        expect(item[:tags].size).to eq(1)
+      end
+    end
+
+    destroyed_source = Addwalk::Source.new(@service_provider.token).destroy(source[:id])
+    expect(destroyed_source[:success]).to eq(true)
   end
 
   after :all do
