@@ -10,6 +10,7 @@ require './lib/addwalk/category'
 require './lib/addwalk/tag'
 require './lib/addwalk/source'
 require './lib/addwalk/source_set'
+require './lib/addwalk/product'
 
 module Addwalk
   class << self

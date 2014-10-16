@@ -7,13 +7,5 @@ module Addwalk
       @model_path = "products"
     end
 
-    def index params = {}
-      params[:token] ||= nil
-      params[:status] ||= 'all'
-      params[:page] ||= 1
-
-      super params
-    end
-
   end
 end

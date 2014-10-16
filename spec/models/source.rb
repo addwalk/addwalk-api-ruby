@@ -196,6 +196,11 @@ describe "Addwalk::Source" do
     source = source_request[:source]
     expect(source[:items].size).to eq(2)
     source[:items].each do |item|
+
+      # todo
+      expect(item[:category][:identifier]).to eq("")
+      expect(item[:category][:id]).to eq("")
+
       if item[:x] == 10.0
         expect(item[:products].size).to be > 0
         expect(item[:tags].size).to eq(4)

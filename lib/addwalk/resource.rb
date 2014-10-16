@@ -17,6 +17,7 @@ module Addwalk
     # basic restful-actions
     def index params = {}
       params[:page] ||= 1
+      params[:page_size] ||= 10
       check_result get_result( @model_path, params )
     end
 
