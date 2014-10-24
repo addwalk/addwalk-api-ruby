@@ -6,6 +6,7 @@ require './lib/addwalk/service_provider'
 require './lib/addwalk/resource'
 
 # model-endpoints
+require './lib/addwalk/brand'
 require './lib/addwalk/category'
 require './lib/addwalk/tag'
 require './lib/addwalk/source'
